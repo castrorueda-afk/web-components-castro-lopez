@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Telón · Agenda cultural de Bogotá</title>
+  <meta name="description" content="Agenda cultural construida con Web Components nativos: un template propio, Shadow DOM, atributos y slots.">
+  <meta name="theme-color" content="#171311">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23C8372D'/%3E%3Cpath d='M6 6h20v3H6z' fill='%23F5E6D3'/%3E%3Cpath d='M8 10h7c0 5-1 10-4 16H8z' fill='%23F5E6D3'/%3E%3Cpath d='M24 10h-7c0 5 1 10 4 16h3z' fill='%23F5E6D3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/estilos.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#cartelera">Saltar a la cartelera</a>
+
+  <header class="barra">
+    <div class="contenedor barra-interna">
+      <a class="marca" href="#inicio" aria-label="Telón, agenda cultural de Bogotá">
+        <svg class="marca-simbolo" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="#C8372D"/>
+          <path d="M6 6h20v3H6z" fill="#F5E6D3"/>
+          <path d="M8 10h7c0 5-1 10-4 16H8z" fill="#F5E6D3"/>
+          <path d="M24 10h-7c0 5 1 10 4 16h3z" fill="#F5E6D3"/>
+        </svg>
+        <span class="marca-nombre">Telón</span>
+        <span class="marca-ciudad">Bogotá</span>
+      </a>
+      <nav aria-label="Principal">
+        <ul class="navegacion">
+          <li><a href="#cartelera">Cartelera</a></li>
+          <li><a href="#publicar">Publicar evento</a></li>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="portada" aria-labelledby="titulo-portada">
+      <div class="contenedor portada-interna">
+        <div class="portada-texto">
+          <p class="antetitulo">Temporada noviembre – diciembre 2026</p>
+          <h1 id="titulo-portada">La ciudad sube el telón. <em>Reserva tu cupo.</em></h1>
+          <p class="portada-descripcion">Teatro, música y cine en salas independientes de Bogotá. Cada tarjeta de la cartelera es una instancia del mismo Web Component nativo, construido sin librerías.</p>
+          <div class="portada-acciones">
+            <a class="boton boton-primario" href="#cartelera">Ver cartelera</a>
+            <a class="boton boton-secundario" href="#publicar">Publicar un evento</a>
+          </div>
+        </div>
+        <dl class="indicadores">
+          <div class="indicador">
+            <dt>Eventos</dt>
+            <dd id="total-eventos">–</dd>
+          </div>
+          <div class="indicador">
+            <dt>Cupos libres</dt>
+            <dd id="total-cupos">–</dd>
+          </div>
+          <div class="indicador">
+            <dt>Escenarios</dt>
+            <dd id="total-escenarios">–</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="seccion" id="cartelera" aria-labelledby="titulo-cartelera">
+      <div class="contenedor">
+        <div class="seccion-encabezado">
+          <div>
+            <p class="antetitulo">Cartelera</p>
+            <h2 id="titulo-cartelera">Esta semana en escena</h2>
+          </div>
+          <p class="seccion-nota">Al reservar, el componente actualiza su atributo <code>cupos</code> y se vuelve a pintar solo: barra de ocupación, estado y botón.</p>
+        </div>
+
+        <div class="cartelera" id="lista-eventos">
+          <evento-cultural
+            titulo="La casa de los espejos"
+            categoria="teatro"
+            fecha="2026-11-27T19:30"
+            lugar="Sala Teusaquillo"
+            cupos="42"
+            capacidad="120">
+            Creación colectiva sobre una familia bogotana que se reconoce en los espejos de su vieja casa. Duración: 90 minutos. Recomendada para mayores de 14 años.
+          </evento-cultural>
+
+          <evento-cultural
+            titulo="Noche de gaitas y tambores"
+            categoria="musica"
+            fecha="2026-11-28T20:00"
+            lugar="Patio de las Artes, La Candelaria"
+            cupos="6"
+            capacidad="80">
+            Ensamble de gaitas del Caribe colombiano con músicos invitados de la ciudad. Se recomienda llegar 30 minutos antes para ubicarse.
+          </evento-cultural>
+
+          <evento-cultural
+            titulo="Cortos colombianos al aire libre"
+            categoria="cine"
+            fecha="2026-12-03T18:30"
+            lugar="Terraza Cultural Chapinero"
+            cupos="0"
+            capacidad="60">
+            <strong>Entrada libre</strong> con inscripción previa. Seis cortometrajes nacionales y conversatorio con las directoras al final de la función.
+          </evento-cultural>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion-publicar" id="publicar" aria-labelledby="titulo-publicar">
+      <div class="contenedor publicar-grid">
+        <div class="publicar-texto">
+          <p class="antetitulo">Publicar evento</p>
+          <h2 id="titulo-publicar">Una etiqueta, cualquier evento</h2>
+          <p>El formulario crea una nueva instancia de <code>&lt;evento-cultural&gt;</code> con los datos que escribas. La clase y el template son los mismos de la cartelera; solo cambian los atributos y el contenido del slot.</p>
+          <pre class="codigo"><code><span class="t-etiqueta">&lt;evento-cultural</span>
+  <span class="t-atributo">titulo</span>=<span class="t-valor">"La casa de los espejos"</span>
+  <span class="t-atributo">categoria</span>=<span class="t-valor">"teatro"</span>
+  <span class="t-atributo">fecha</span>=<span class="t-valor">"2026-11-27T19:30"</span>
+  <span class="t-atributo">lugar</span>=<span class="t-valor">"Sala Teusaquillo"</span>
+  <span class="t-atributo">cupos</span>=<span class="t-valor">"42"</span>
+  <span class="t-atributo">capacidad</span>=<span class="t-valor">"120"</span><span class="t-etiqueta">&gt;</span>
+  <span class="t-texto">Nota libre que entra por el slot.</span>
+<span class="t-etiqueta">&lt;/evento-cultural&gt;</span></code></pre>
+          <p class="publicar-ayuda">Si dejas la nota vacía, el slot muestra su contenido de respaldo.</p>
+        </div>
+
+        <form class="formulario" id="formulario-evento">
+          <div class="campo campo-completo">
+            <label for="campo-titulo">Nombre del evento</label>
+            <input id="campo-titulo" name="titulo" type="text" maxlength="70" pattern=".*\S.*" placeholder="Ej. Recital de poesía en la terraza" required>
+          </div>
+          <div class="campo">
+            <label for="campo-categoria">Categoría</label>
+            <select id="campo-categoria" name="categoria" required>
+              <option value="teatro">Teatro</option>
+              <option value="musica">Música</option>
+              <option value="cine">Cine</option>
+              <option value="danza">Danza</option>
+              <option value="literatura" selected>Literatura</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="campo-fecha">Fecha y hora</label>
+            <input id="campo-fecha" name="fecha" type="datetime-local" required>
+          </div>
+          <div class="campo">
+            <label for="campo-lugar">Lugar</label>
+            <input id="campo-lugar" name="lugar" type="text" maxlength="60" pattern=".*\S.*" placeholder="Ej. Casa de la Lectura" required>
+          </div>
+          <div class="campo">
+            <label for="campo-aforo">Aforo</label>
+            <input id="campo-aforo" name="aforo" type="number" min="1" max="500" step="1" placeholder="Ej. 40" required>
+          </div>
+          <div class="campo campo-completo">
+            <label for="campo-nota">Nota para el público <span class="opcional">(opcional, va al slot)</span></label>
+            <textarea id="campo-nota" name="nota" rows="3" maxlength="220" placeholder="Describe el evento, recomendaciones o condiciones de ingreso."></textarea>
+          </div>
+          <button class="boton boton-primario campo-completo" type="submit">Publicar en la cartelera</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="seccion" id="como-funciona" aria-labelledby="titulo-como-funciona">
+      <div class="contenedor">
+        <div class="seccion-encabezado">
+          <div>
+            <p class="antetitulo">Cómo funciona</p>
+            <h2 id="titulo-como-funciona">Anatomía del componente</h2>
+          </div>
+          <p class="seccion-nota">HTML, CSS y JavaScript nativos. Sin React, Vue, Angular ni librerías de estilos.</p>
+        </div>
+        <ol class="requisitos">
+          <li class="requisito">
+            <span class="requisito-codigo">R1</span>
+            <h3>Template propio</h3>
+            <p><code>&lt;template id="plantilla-evento"&gt;</code> trae su propio <code>&lt;style&gt;</code> y marcadores vacíos que JavaScript rellena.</p>
+          </li>
+          <li class="requisito">
+            <span class="requisito-codigo">R2</span>
+            <h3>Custom Element</h3>
+            <p>La clase <code>EventoCultural</code> extiende <code>HTMLElement</code>, clona el template en su Shadow DOM y se registra como <code>evento-cultural</code>.</p>
+          </li>
+          <li class="requisito">
+            <span class="requisito-codigo">R3</span>
+            <h3>Seis atributos</h3>
+            <p><code>titulo</code>, <code>categoria</code>, <code>fecha</code>, <code>lugar</code>, <code>cupos</code> y <code>capacidad</code> se observan y vuelven a pintar la tarjeta al cambiar.</p>
+          </li>
+          <li class="requisito">
+            <span class="requisito-codigo">R4</span>
+            <h3>Slot para la nota</h3>
+            <p>El contenido entre las etiquetas se proyecta en el <code>&lt;slot&gt;</code>; si no hay contenido, aparece el texto de respaldo.</p>
+          </li>
+          <li class="requisito">
+            <span class="requisito-codigo">R5</span>
+            <h3>Reutilización</h3>
+            <p>Tres instancias con datos distintos comparten la misma clase y el mismo template, y el formulario puede crear más.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie-pagina">
+    <div class="contenedor pie-interna">
+      <p><strong>Telón</strong> · Proyecto académico de Web Components y HTML Templates.</p>
+      <p>Juan Manuel Castro y David Ricardo López · 2026</p>
+    </div>
+  </footer>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+  <template id="plantilla-evento">
+    <style>
+      :host {
+        --acento: #b42d25;
+        --acento-suave: rgb(180 45 37 / 0.08);
+        display: block;
+        container-type: inline-size;
+        color: var(--tinta, #1e1b18);
+      }
+
+      :host([categoria="musica"]) {
+        --acento: #925400;
+        --acento-suave: rgb(146 84 0 / 0.09);
+      }
+
+      :host([categoria="cine"]) {
+        --acento: #1f6266;
+        --acento-suave: rgb(31 98 102 / 0.08);
+      }
+
+      :host([categoria="danza"]) {
+        --acento: #6c3fa0;
+        --acento-suave: rgb(108 63 160 / 0.08);
+      }
+
+      :host([categoria="literatura"]) {
+        --acento: #386334;
+        --acento-suave: rgb(56 99 52 / 0.08);
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .tarjeta {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid #e7e0d5;
+        border-radius: 20px;
+        box-shadow: 0 1px 2px rgb(30 27 24 / 0.04), 0 10px 28px -16px rgb(30 27 24 / 0.22);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      }
+
+      .tarjeta:hover {
+        transform: translateY(-4px);
+        border-color: color-mix(in srgb, var(--acento) 30%, #e7e0d5);
+        box-shadow: 0 2px 4px rgb(30 27 24 / 0.05), 0 24px 44px -20px rgb(30 27 24 / 0.38);
+      }
+
+      .franja {
+        height: 8px;
+        background: repeating-linear-gradient(90deg, var(--acento) 0 16px, color-mix(in srgb, var(--acento) 78%, #000000) 16px 18px);
+      }
+
+      .cabecera {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 22px 24px 0;
+      }
+
+      .fecha {
+        display: grid;
+        justify-items: center;
+        min-width: 66px;
+        margin: 0;
+        padding: 10px 12px 9px;
+        border-radius: 14px;
+        background: var(--acento-suave);
+        color: var(--acento);
+        line-height: 1;
+      }
+
+      .fecha-dia {
+        font-family: var(--fuente-titulos, Georgia, serif);
+        font-size: 34px;
+      }
+
+      .fecha-mes {
+        margin-top: 6px;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .categoria {
+        padding: 6px 12px;
+        border: 1px solid color-mix(in srgb, var(--acento) 35%, transparent);
+        border-radius: 999px;
+        color: var(--acento);
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .cuerpo {
+        flex: 1;
+        padding: 18px 24px 0;
+      }
+
+      .titulo {
+        margin: 0 0 14px;
+        font-family: var(--fuente-titulos, Georgia, serif);
+        font-size: 26px;
+        font-weight: 400;
+        line-height: 1.12;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+      }
+
+      .detalles {
+        display: grid;
+        gap: 8px;
+        margin: 0 0 18px;
+        padding: 0;
+        list-style: none;
+        color: #57504a;
+        font-size: 14.5px;
+        line-height: 1.45;
+      }
+
+      .detalles li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .detalles svg {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+        color: var(--acento);
+      }
+
+      .nota {
+        padding: 12px 14px;
+        border-left: 3px solid var(--acento);
+        border-radius: 4px 12px 12px 4px;
+        background: #faf7f2;
+        color: #3d3832;
+        font-size: 14.5px;
+        line-height: 1.6;
+      }
+
+      .nota-vacia {
+        border-left-style: dashed;
+        color: #6b645c;
+        font-style: italic;
+      }
+
+      ::slotted(strong) {
+        color: var(--acento);
+      }
+
+      .pie {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+        padding: 18px 24px 22px;
+        border-top: 1px dashed #e7e0d5;
+      }
+
+      .cupos {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .cupos-texto {
+        margin: 0 0 8px;
+        color: #5e574f;
+        font-size: 13.5px;
+      }
+
+      .cupos-texto strong {
+        margin-right: 2px;
+        color: #1e1b18;
+        font-family: var(--fuente-titulos, Georgia, serif);
+        font-size: 22px;
+        font-weight: 400;
+      }
+
+      .barra {
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #efe9e0;
+      }
+
+      .barra-relleno {
+        display: block;
+        width: var(--ocupacion, 0%);
+        height: 100%;
+        border-radius: inherit;
+        background: var(--acento);
+        transition: width 0.45s ease;
+      }
+
+      .tarjeta[data-estado="pocos"] .cupos-texto span {
+        color: #b42318;
+        font-weight: 700;
+      }
+
+      .tarjeta[data-estado="agotado"] .cupos-texto span {
+        color: #6b645c;
+        font-weight: 700;
+      }
+
+      .tarjeta[data-estado="agotado"] .barra-relleno {
+        background: #8a8279;
+      }
+
+      .reservar {
+        flex: none;
+        padding: 12px 20px;
+        border: 0;
+        border-radius: 999px;
+        background: #1e1b18;
+        color: #ffffff;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+      }
+
+      .reservar:hover {
+        background: var(--acento);
+      }
+
+      .reservar:active {
+        transform: scale(0.97);
+      }
+
+      .reservar:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--acento) 50%, transparent);
+        outline-offset: 2px;
+      }
+
+      .reservar:disabled {
+        background: #efe9e0;
+        color: #6b645c;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      @container (max-width: 380px) {
+        .cabecera,
+        .cuerpo,
+        .pie {
+          padding-inline: 20px;
+        }
+
+        .titulo {
+          font-size: 24px;
+        }
+
+        .pie {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .reservar {
+          width: 100%;
+          padding-block: 14px;
+        }
+      }
+
+      @container (min-width: 600px) {
+        .tarjeta {
+          display: grid;
+          grid-template-columns: 150px 1fr;
+          grid-template-rows: auto 1fr auto;
+        }
+
+        .franja {
+          grid-column: 1 / -1;
+        }
+
+        .cabecera {
+          grid-row: 2 / 4;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 16px;
+          padding: 26px 20px;
+          border-right: 1px dashed #e7e0d5;
+        }
+
+        .fecha {
+          min-width: 86px;
+        }
+
+        .fecha-dia {
+          font-size: 42px;
+        }
+
+        .cuerpo {
+          padding: 24px 28px 0;
+        }
+
+        .pie {
+          margin-top: 18px;
+          padding-inline: 28px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .tarjeta,
+        .barra-relleno,
+        .reservar {
+          transition: none;
+        }
+
+        .tarjeta:hover {
+          transform: none;
+        }
+      }
+    </style>
+
+    <article class="tarjeta" data-estado="disponible" aria-labelledby="titulo-evento">
+      <div class="franja" aria-hidden="true"></div>
+      <header class="cabecera">
+        <p class="fecha" aria-hidden="true">
+          <span class="fecha-dia" data-campo="dia"></span>
+          <span class="fecha-mes" data-campo="mes"></span>
+        </p>
+        <span class="categoria" data-campo="categoria"></span>
+      </header>
+      <div class="cuerpo">
+        <h3 class="titulo" id="titulo-evento" data-campo="titulo"></h3>
+        <ul class="detalles">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <time data-campo="horario"></time>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <span data-campo="lugar"></span>
+          </li>
+        </ul>
+        <div class="nota">
+          <slot>Pronto publicaremos la descripción de este evento.</slot>
+        </div>
+      </div>
+      <footer class="pie">
+        <div class="cupos">
+          <p class="cupos-texto"><strong data-campo="cupos"></strong> <span data-campo="estado"></span></p>
+          <div class="barra" role="progressbar" aria-label="Ocupación del evento" aria-valuemin="0" aria-valuemax="100" data-campo="barra">
+            <span class="barra-relleno"></span>
+          </div>
+        </div>
+        <button class="reservar" type="button" aria-describedby="titulo-evento" data-campo="boton">Reservar cupo</button>
+      </footer>
+    </article>
+  </template>
+</body>
+</html>
