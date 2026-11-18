@@ -100,13 +100,11 @@ document.getElementById('plantilla-evento').content; // DocumentFragment del tem
 
 ## Mockups
 
-Los mockups combinan **capturas reales** de la página, tomadas con Chrome, con marcos de dispositivo **ilustrativos** (el monitor, el portátil y los teléfonos no corresponden a ninguna marca). No muestran ninguna función que no exista en la página.
+Los mockups combinan **capturas reales** de la página
 
 ### Mockup de escritorio
 
-Monitor a 1600 × 1000 px con la cartelera y sus tres instancias de `<evento-cultural>`, y portátil a 1440 × 900 px con la portada.
-
-![Mockup de escritorio de Telón](assets/mockups/desktop.png)
+<img width="821" height="946" alt="image" src="https://github.com/user-attachments/assets/f980fa0a-9c93-41a4-bfce-566adc73230e" />
 
 ### Mockup de celular
 
