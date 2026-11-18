@@ -110,7 +110,10 @@ Los mockups combinan **capturas reales** de la página
 
 Viewport de 390 × 844 px: a la izquierda la portada y a la derecha la cartelera. La navegación baja a una segunda fila, los botones se apilan y cada tarjeta ocupa el ancho completo, con el botón de reserva a lo ancho.
 
-![Mockup de celular de Telón](assets/mockups/mobile.png)
+<img width="253" height="390" alt="image" src="https://github.com/user-attachments/assets/672fd7b3-7759-4ebf-b6c8-6ca978fe9bc6" />
+<img width="250" height="640" alt="image" src="https://github.com/user-attachments/assets/a87409a7-bcce-40df-a4f2-521cb340449f" />
+<img width="251" height="394" alt="image" src="https://github.com/user-attachments/assets/06a92a9b-c1e0-40e9-8936-bbd81c858231" />
+<img width="254" height="400" alt="image" src="https://github.com/user-attachments/assets/ba54f441-db7b-4885-b2e9-af221ca2e641" />
 
 ### Capturas reales de página completa
 
